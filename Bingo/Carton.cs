@@ -6,7 +6,7 @@ namespace Bingo
 {
     class Carton
     {
-        private int[,] carton, enCarton;
+        private int[,] carton, carton_marcado;
         private int fila, columna, aux_fila, aux_columna;
 
         public Carton()
@@ -19,10 +19,11 @@ namespace Bingo
             return carton;
         }
 
-        public int[,] GetEnCarton()
+        public int[,] GetCartonMarcado()
         {
-            return enCarton;
+            return carton_marcado;
         }
+
         public int Fila
         {
             get { return fila; }
@@ -39,20 +40,28 @@ namespace Bingo
         {
             // Rellena el carton con numeros aleatorios sin repetir
             carton = new int[Fila, Columna];
-            enCarton = new int[Fila, Columna];
-            Numeros numR = new Numeros();
-            for (int f = 0; f < Fila; f++)
+            carton_marcado = new int[Fila, Columna];
+            for (int j = 0; j < Columna; j++)
             {
-                for (int c = 0; c < Columna; c++)
+                RellenarFila(carton, j);
+            }
+        }
+
+        void RellenarFila(int[,] c ,int fila)
+        {
+            int[] multiplos = new int[] { 25, 50, 75, 100, 125 };
+            int[] inf = new int[] { 1, 25, 50, 75, 100 };
+            Numeros rnd = new Numeros();
+            int lim_superior = (int)multiplos.GetValue(fila), lim_inferior = (int)inf.GetValue(fila);
+            for (int j = 0; j < Columna; j++)
+            {
+                rnd.NumRandom(lim_inferior, lim_superior);
+                while (BuscarNum(rnd.Num, c) == true)
                 {
-                    numR.NumRandom();
-                    while (BuscarNum(numR.Num, carton) == true)
-                    {
-                        numR.NumRandom();
-                    }
-                    carton[f, c] = numR.Num;
+                    rnd.NumRandom(lim_inferior, lim_superior);
                 }
-            }  
+                c[fila, j] = rnd.Num;
+            }
         }
 
         public void Imprimir(int jugador, int[,] nCarton)
@@ -64,7 +73,7 @@ namespace Bingo
             {
                 for (int c = 0; c < Columna; c++)
                 {
-                    Console.Write(nCarton[f, c] + " ");
+                    Console.Write(nCarton[f, c].ToString("D3") + " ");
                 }
                 Console.WriteLine();
             }
@@ -78,7 +87,7 @@ namespace Bingo
             {
                 for (int c = 0; c < Columna; c++)
                 {
-                    Console.Write(carton[f, c] + " ");
+                    Console.Write(carton[f, c].ToString("D3") + " ");
                 }
                 Console.WriteLine();
             }
@@ -107,13 +116,14 @@ namespace Bingo
             // Valida si la bola que salio esta en el carton 
             if (BuscarNum(bola, carton) == true)
             {
-                enCarton[aux_fila, aux_columna] = 1;
+                carton_marcado[aux_fila, aux_columna] = 1;
             }
         }
 
         public bool Modo_cartonLleno()
         {
-            if (BuscarNum(0, enCarton) == false)
+            //Console.Write("\n-  CArton LLeno ");
+            if (BuscarNum(0, carton_marcado) == false)
             {
                 return true;
             }
@@ -123,8 +133,8 @@ namespace Bingo
 
         public bool Modo_4Esquinas()
         {
-            if (enCarton[0, 0] == 1 && enCarton[0, Columna - 1] == 1 &&
-                enCarton[Fila - 1, 0] == 1 && enCarton[Fila - 1, Columna - 1] == 1)
+            if (carton_marcado[0, 0] == 1 && carton_marcado[0, Columna - 1] == 1 &&
+                carton_marcado[Fila - 1, 0] == 1 && carton_marcado[Fila - 1, Columna - 1] == 1)
             {
                 return true;
             }
@@ -143,7 +153,7 @@ namespace Bingo
             {
                 for (int c = 0; c < Columna; c++)
                 {
-                    if (c == x - 1 && enCarton[f, c] == 1 || c == y && enCarton[f, c] == 1)
+                    if (c == x - 1 && carton_marcado[f, c] == 1 || c == y && carton_marcado[f, c] == 1)
                     {
                         modoX += 1;
                     }

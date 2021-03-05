@@ -6,7 +6,7 @@ namespace Bingo
 {
     class Numeros
     {
-        private int num, numMax = 91;
+        private int num;
 
 
         public Numeros(int num)
@@ -19,10 +19,10 @@ namespace Bingo
 
         }
 
-        public void NumRandom()
+        public void NumRandom(int lim_inferior, int lim_superior)
         {
             Random rnd = new Random();
-            num = rnd.Next(1, numMax);
+            num = rnd.Next(lim_inferior, lim_superior);
         }
 
         public int Num

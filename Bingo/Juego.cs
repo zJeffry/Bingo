@@ -55,9 +55,11 @@ namespace Bingo
 
         void Cargar_juego(int val)
         {
+            int cantidad = 125;
             carton_j1 = new Carton();
             carton_j2 = new Carton();
             bombo = new Bombo();
+            bombo.CantBolas = cantidad;
             bombo.Cargar();
             if (val == 1)
             {
@@ -70,7 +72,7 @@ namespace Bingo
             }
             else
             {
-                int f = 15;
+                int f = 5;
                 int c = 5;
                 carton_j1.Fila = f;
                 carton_j1.Columna = c;
@@ -79,22 +81,22 @@ namespace Bingo
             }
             carton_j1.Cargar();
             carton_j2.Cargar();
-            carton_j1.Imprimir(1);
-            carton_j2.Imprimir(2);
+            carton_j1.Imprimir(1, carton_j1.GetCarton());
+            carton_j2.Imprimir(2, carton_j2.GetCarton());
         }
 
-        bool Simular(bool j1, bool j2, Bombo b, Carton c_j1, Carton c_j2)
+        bool Simular(bool j1, bool j2, Carton c_j1, Carton c_j2)
         {  
             if (j1 == true && j2 == false)
             {
                 Console.WriteLine("\n !Gano el jugador 1¡");
-                c_j1.Imprimir(1);
+                c_j1.Imprimir(1, c_j1.GetCarton());
                 return true;
             }
             if (j2 == true && j1 == false)
             {
                 Console.WriteLine("\n !Gano el jugador 2¡");
-                c_j2.Imprimir(2);
+                c_j2.Imprimir(2, c_j2.GetCarton());
                 return true;
             }
             if (j1 == true && j2 == true)
@@ -114,7 +116,7 @@ namespace Bingo
                 bombo.SacarBola();
                 carton_j1.ActualizarCarton(bombo.Bola);
                 carton_j2.ActualizarCarton(bombo.Bola);
-                aux = Simular(carton_j1.Modo_cartonLleno(), carton_j2.Modo_cartonLleno(), bombo, carton_j1, carton_j2);
+                aux = Simular(carton_j1.Modo_cartonLleno(), carton_j2.Modo_cartonLleno(), carton_j1, carton_j2);
             }
             Revisar_carton(carton_j1, carton_j2);
         }
@@ -128,7 +130,7 @@ namespace Bingo
                 bombo.SacarBola();
                 carton_j1.ActualizarCarton(bombo.Bola);
                 carton_j2.ActualizarCarton(bombo.Bola);
-                aux = Simular(carton_j1.Modo_4Esquinas(), carton_j2.Modo_4Esquinas(), bombo, carton_j1, carton_j2);
+                aux = Simular(carton_j1.Modo_4Esquinas(), carton_j2.Modo_4Esquinas(), carton_j1, carton_j2);
             }
             Revisar_carton(carton_j1, carton_j2);
         }
@@ -142,15 +144,15 @@ namespace Bingo
                 bombo.SacarBola();
                 carton_j1.ActualizarCarton(bombo.Bola);
                 carton_j2.ActualizarCarton(bombo.Bola);
-                aux = Simular(carton_j1.Modo_x(), carton_j2.Modo_x(), bombo, carton_j1, carton_j2);
+                aux = Simular(carton_j1.Modo_x(), carton_j2.Modo_x(), carton_j1, carton_j2);
             }
             Revisar_carton(carton_j1, carton_j2);
         }
 
         void Revisar_carton(Carton c_j1, Carton c_j2)
         {
-            c_j1.Imprimir(1, c_j1.GetEnCarton());
-            c_j2.Imprimir(2, c_j2.GetEnCarton());
+            c_j1.Imprimir(1, c_j1.GetCartonMarcado());
+            c_j2.Imprimir(2, c_j2.GetCartonMarcado());
             Console.WriteLine(bombo.BomboToString());
             Console.WriteLine(bombo.ListaBToString());
         }

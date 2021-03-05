@@ -5,7 +5,7 @@ namespace Bingo
 {
     public class Bombo
     {
-        private int bola, maxB=90, aux;
+        private int bola, cantBolas, aux;
         private List<int> listaB;
         public HashSet<int> bombo;
         private Numeros num;
@@ -29,6 +29,12 @@ namespace Bingo
             set { bola = value; }
         }
 
+        public int CantBolas
+        {
+            get { return cantBolas; }
+            set { cantBolas = value; }
+        }
+
         public override string ToString()
         {
             return "Bola " + ": " + bola.ToString();
@@ -39,10 +45,10 @@ namespace Bingo
             aux = 0;
             while (bombo.Count !=0 && aux == 0)
             {
-                num.NumRandom();
+                num.NumRandom(1, CantBolas + 1);
                 if (BuscarB(num.Num) == false)
                 {
-                    num.NumRandom();
+                    num.NumRandom(1, CantBolas + 1);
                 }
                 else
                 {
@@ -59,10 +65,10 @@ namespace Bingo
 
         public void Cargar()
         {
-            //Rellena el bombo con 90 bolas
-            while (bombo.Count != maxB)
+            //Rellena el bombo
+            while (bombo.Count != CantBolas)
             {
-                num.NumRandom();
+                num.NumRandom(1, CantBolas + 1);
                 bombo.Add(num.Num);
             }
         }
@@ -80,7 +86,7 @@ namespace Bingo
 
         public String ListaBToString()
         {
-            //Lista con la bolas que salieron
+            //Lista con la bolas que salieron del bombo
             String b = "";
             Console.WriteLine("\n Salieron " + listaB.Count + " bolas");
             foreach (var x in listaB)
